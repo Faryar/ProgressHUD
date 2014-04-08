@@ -23,7 +23,6 @@
 
 @implementation ProgressHUD
 
-@synthesize interaction, window, background, hud, spinner, image, label;
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 + (ProgressHUD *)shared
@@ -101,10 +100,10 @@
 	id<UIApplicationDelegate> delegate = [[UIApplication sharedApplication] delegate];
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	if ([delegate respondsToSelector:@selector(window)])
-		window = [delegate performSelector:@selector(window)];
-	else window = [[UIApplication sharedApplication] keyWindow];
+		self.window = [delegate performSelector:@selector(window)];
+	else self.window = [[UIApplication sharedApplication] keyWindow];
 	//---------------------------------------------------------------------------------------------------------------------------------------------
-	background = nil; hud = nil; spinner = nil; image = nil; label = nil;
+	self.background = nil; self.hud = nil; self.spinner = nil; self.image = nil; self.label = nil;
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	self.alpha = 0;
 	//---------------------------------------------------------------------------------------------------------------------------------------------
@@ -117,13 +116,13 @@
 {
 	[self hudCreate];
 	//---------------------------------------------------------------------------------------------------------------------------------------------
-	label.text = status;
-	label.hidden = (status == nil) ? YES : NO;
+	self.label.text = status;
+	self.label.hidden = (status == nil) ? YES : NO;
 	//---------------------------------------------------------------------------------------------------------------------------------------------
-	image.image = img;
-	image.hidden = (img == nil) ? YES : NO;
+	self.image.image = img;
+	self.image.hidden = (img == nil) ? YES : NO;
 	//---------------------------------------------------------------------------------------------------------------------------------------------
-	if (spin) [spinner startAnimating]; else [spinner stopAnimating];
+	if (spin) [self.spinner startAnimating]; else [self.spinner stopAnimating];
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	[self hudOrient];
 	[self hudSize];
@@ -137,55 +136,55 @@
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
 	//---------------------------------------------------------------------------------------------------------------------------------------------
-	if (hud == nil)
+	if (self.hud == nil)
 	{
-		hud = [[UIToolbar alloc] initWithFrame:CGRectZero];
-		hud.translucent = YES;
-		hud.backgroundColor = HUD_BACKGROUND_COLOR;
-		hud.layer.cornerRadius = 10;
-		hud.layer.masksToBounds = YES;
+		self.hud = [[UIToolbar alloc] initWithFrame:CGRectZero];
+		self.hud.translucent = YES;
+		self.hud.backgroundColor = HUD_BACKGROUND_COLOR;
+		self.hud.layer.cornerRadius = 10;
+		self.hud.layer.masksToBounds = YES;
 		//-----------------------------------------------------------------------------------------------------------------------------------------
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(rotate:) name:UIDeviceOrientationDidChangeNotification object:nil];
 	}
 	//---------------------------------------------------------------------------------------------------------------------------------------------
-	if (hud.superview == nil)
+	if (self.hud.superview == nil)
 	{
-		if (interaction == NO)
+		if (self.interaction == NO)
 		{
-			CGRect frame = CGRectMake(window.frame.origin.x, window.frame.origin.y, window.frame.size.width, window.frame.size.height);
-			background = [[UIView alloc] initWithFrame:frame];
-			background.backgroundColor = [UIColor clearColor];
-			[window addSubview:background];
-			[background addSubview:hud];
+			CGRect frame = CGRectMake(self.window.frame.origin.x, self.window.frame.origin.y, self.window.frame.size.width, self.window.frame.size.height);
+			self.background = [[UIView alloc] initWithFrame:frame];
+			self.background.backgroundColor = [UIColor clearColor];
+			[self.window addSubview:self.background];
+			[self.background addSubview:self.hud];
 		}
-		else [window addSubview:hud];
+		else [self.window addSubview:self.hud];
 	}
 	//---------------------------------------------------------------------------------------------------------------------------------------------
-	if (spinner == nil)
+	if (self.spinner == nil)
 	{
-		spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-		spinner.color = HUD_SPINNER_COLOR;
-		spinner.hidesWhenStopped = YES;
+		self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+		self.spinner.color = HUD_SPINNER_COLOR;
+		self.spinner.hidesWhenStopped = YES;
 	}
-	if (spinner.superview == nil) [hud addSubview:spinner];
+	if (self.spinner.superview == nil) [self.hud addSubview:self.spinner];
 	//---------------------------------------------------------------------------------------------------------------------------------------------
-	if (image == nil)
+	if (self.image == nil)
 	{
-		image = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 28, 28)];
+		self.image = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 28, 28)];
 	}
-	if (image.superview == nil) [hud addSubview:image];
+	if (self.image.superview == nil) [self.hud addSubview:self.image];
 	//---------------------------------------------------------------------------------------------------------------------------------------------
-	if (label == nil)
+	if (self.label == nil)
 	{
-		label = [[UILabel alloc] initWithFrame:CGRectZero];
-		label.font = HUD_STATUS_FONT;
-		label.textColor = HUD_STATUS_COLOR;
-		label.backgroundColor = [UIColor clearColor];
-		label.textAlignment = NSTextAlignmentCenter;
-		label.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
-		label.numberOfLines = 0;
+		self.label = [[UILabel alloc] initWithFrame:CGRectZero];
+		self.label.font = HUD_STATUS_FONT;
+		self.label.textColor = HUD_STATUS_COLOR;
+		self.label.backgroundColor = [UIColor clearColor];
+		self.label.textAlignment = NSTextAlignmentCenter;
+		self.label.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
+		self.label.numberOfLines = 0;
 	}
-	if (label.superview == nil) [hud addSubview:label];
+	if (self.label.superview == nil) [self.hud addSubview:self.label];
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 }
 
@@ -195,11 +194,11 @@
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
 	//---------------------------------------------------------------------------------------------------------------------------------------------
-	[label removeFromSuperview];		label = nil;
-	[image removeFromSuperview];		image = nil;
-	[spinner removeFromSuperview];		spinner = nil;
-	[hud removeFromSuperview];			hud = nil;
-	[background removeFromSuperview];	background = nil;
+	[self.label removeFromSuperview];		self.label = nil;
+	[self.image removeFromSuperview];		self.image = nil;
+	[self.spinner removeFromSuperview];		self.spinner = nil;
+	[self.hud removeFromSuperview];			self.hud = nil;
+	[self.background removeFromSuperview];	self.background = nil;
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -222,7 +221,7 @@
 	if (orient == UIInterfaceOrientationLandscapeLeft)		rotate = - M_PI_2;
 	if (orient == UIInterfaceOrientationLandscapeRight)		rotate = + M_PI_2;
 	//---------------------------------------------------------------------------------------------------------------------------------------------
-	hud.transform = CGAffineTransformMakeRotation(rotate);
+	self.hud.transform = CGAffineTransformMakeRotation(rotate);
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -232,11 +231,11 @@
 	CGRect labelRect = CGRectZero;
 	CGFloat hudWidth = 100, hudHeight = 100;
 	//---------------------------------------------------------------------------------------------------------------------------------------------
-	if (label.text != nil)
+	if (self.label.text != nil)
 	{
-		NSDictionary *attributes = @{NSFontAttributeName:label.font};
+		NSDictionary *attributes = @{NSFontAttributeName:self.label.font};
 		NSInteger options = NSStringDrawingUsesFontLeading | NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin;
-		labelRect = [label.text boundingRectWithSize:CGSizeMake(200, 300) options:options attributes:attributes context:NULL];
+		labelRect = [self.label.text boundingRectWithSize:CGSizeMake(200, 300) options:options attributes:attributes context:NULL];
 
 		labelRect.origin.x = 12;
 		labelRect.origin.y = 66;
@@ -254,14 +253,14 @@
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	CGSize screen = [UIScreen mainScreen].bounds.size;
 	//---------------------------------------------------------------------------------------------------------------------------------------------
-	hud.center = CGPointMake(screen.width/2, screen.height/2);
-	hud.bounds = CGRectMake(0, 0, hudWidth, hudHeight);
+	self.hud.center = CGPointMake(screen.width/2, screen.height/2);
+	self.hud.bounds = CGRectMake(0, 0, hudWidth, hudHeight);
 	//---------------------------------------------------------------------------------------------------------------------------------------------
 	CGFloat imagex = hudWidth/2;
-	CGFloat imagey = (label.text == nil) ? hudHeight/2 : 36;
-	image.center = spinner.center = CGPointMake(imagex, imagey);
+	CGFloat imagey = (self.label.text == nil) ? hudHeight/2 : 36;
+	self.image.center = self.spinner.center = CGPointMake(imagex, imagey);
 	//---------------------------------------------------------------------------------------------------------------------------------------------
-	label.frame = labelRect;
+	self.label.frame = labelRect;
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -272,14 +271,16 @@
 	{
 		self.alpha = 1;
 
-		hud.alpha = 0;
-		hud.transform = CGAffineTransformScale(hud.transform, 1.4, 1.4);
+		self.hud.alpha = 0;
+		self.hud.transform = CGAffineTransformScale(self.hud.transform, 1.4, 1.4);
 
 		NSUInteger options = UIViewAnimationOptionAllowUserInteraction | UIViewAnimationCurveEaseOut;
 
+        __weak __typeof__(self) weakSelf = self;
+
 		[UIView animateWithDuration:0.15 delay:0 options:options animations:^{
-			hud.transform = CGAffineTransformScale(hud.transform, 1/1.4, 1/1.4);
-			hud.alpha = 1;
+			weakSelf.hud.transform = CGAffineTransformScale(weakSelf.hud.transform, 1/1.4, 1/1.4);
+			weakSelf.hud.alpha = 1;
 		}
 		completion:^(BOOL finished){ }];
 	}
@@ -289,13 +290,14 @@
 - (void)hudHide
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
+    __weak __typeof__(self) weakSelf = self;
 	if (self.alpha == 1)
 	{
 		NSUInteger options = UIViewAnimationOptionAllowUserInteraction | UIViewAnimationCurveEaseIn;
 
 		[UIView animateWithDuration:0.15 delay:0 options:options animations:^{
-			hud.transform = CGAffineTransformScale(hud.transform, 0.7, 0.7);
-			hud.alpha = 0;
+			weakSelf.hud.transform = CGAffineTransformScale(weakSelf.hud.transform, 0.7, 0.7);
+			weakSelf.hud.alpha = 0;
 		}
 		completion:^(BOOL finished)
 		{
@@ -311,7 +313,7 @@
 {
 	@autoreleasepool
 	{
-		double length = label.text.length;
+		double length = self.label.text.length;
 		NSTimeInterval sleep = length * 0.04 + 0.5;
 		
 		[NSThread sleepForTimeInterval:sleep];
