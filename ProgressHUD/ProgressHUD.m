@@ -276,11 +276,9 @@
 
 		NSUInteger options = UIViewAnimationOptionAllowUserInteraction | UIViewAnimationCurveEaseOut;
 
-        __weak __typeof__(self) weakSelf = self;
-
 		[UIView animateWithDuration:0.15 delay:0 options:options animations:^{
-			weakSelf.hud.transform = CGAffineTransformScale(weakSelf.hud.transform, 1/1.4, 1/1.4);
-			weakSelf.hud.alpha = 1;
+			self.hud.transform = CGAffineTransformScale(self.hud.transform, 1/1.4, 1/1.4);
+			self.hud.alpha = 1;
 		}
 		completion:^(BOOL finished){ }];
 	}
@@ -290,14 +288,13 @@
 - (void)hudHide
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
-    __weak __typeof__(self) weakSelf = self;
 	if (self.alpha == 1)
 	{
 		NSUInteger options = UIViewAnimationOptionAllowUserInteraction | UIViewAnimationCurveEaseIn;
 
 		[UIView animateWithDuration:0.15 delay:0 options:options animations:^{
-			weakSelf.hud.transform = CGAffineTransformScale(weakSelf.hud.transform, 0.7, 0.7);
-			weakSelf.hud.alpha = 0;
+			self.hud.transform = CGAffineTransformScale(self.hud.transform, 0.7, 0.7);
+			self.hud.alpha = 0;
 		}
 		completion:^(BOOL finished)
 		{
